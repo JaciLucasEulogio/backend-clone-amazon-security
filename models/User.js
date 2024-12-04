@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phoneNumber: { type: String, default: null },
+  ruc: { type: String, default: null }, // Nuevo campo para RUC
   isVerified: { type: Boolean, default: false },
   verificationCode: { type: String, default: null },
   is2FAEnabled: { type: Boolean, default: false },

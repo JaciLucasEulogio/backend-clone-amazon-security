@@ -23,4 +23,10 @@ router.post('/enable-2fa', authController.enable2FA);
 // Ruta para deshabilitar la 2FA
 router.post('/disable-2fa', authController.disable2FA);
 
+// Obtener perfil del usuario
+router.post('/profile', authController.getProfile);
+
+
+
+
 module.exports = router;

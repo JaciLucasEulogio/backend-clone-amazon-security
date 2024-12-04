@@ -121,9 +121,10 @@ exports.verify2FA = async (req, res) => {
   }
 };
 
+
 // Actualización de usuario
 exports.updateUser = async (req, res) => {
-  const { name, email, phoneNumber } = req.body;
+  const { name, email, phoneNumber, ruc } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -131,6 +132,7 @@ exports.updateUser = async (req, res) => {
 
     user.name = name || user.name;
     user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.ruc = ruc || user.ruc;
     await user.save();
 
     res.status(200).json({ msg: 'Datos actualizados' });
@@ -139,6 +141,7 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ msg: 'Error del servidor' });
   }
 };
+
 
 // Activar 2FA
 exports.enable2FA = async (req, res) => {
@@ -168,6 +171,29 @@ exports.disable2FA = async (req, res) => {
     user.is2FAEnabled = false;
     await user.save();
     res.status(200).json({ msg: 'Verificación de doble factor deshabilitada' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Error del servidor' });
+  }
+};
+
+
+
+
+
+
+
+
+// Obtener datos del perfil del usuario
+exports.getProfile = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: 'Usuario no encontrado' });
+
+    const { name, email: userEmail, phoneNumber, ruc, isVerified, is2FAEnabled } = user;
+    res.status(200).json({ name, email: userEmail, phoneNumber, ruc, isVerified, is2FAEnabled });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Error del servidor' });
